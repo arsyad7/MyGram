@@ -21,6 +21,7 @@ func main() {
 	userRoutes := r.Group("/users")
 	{
 		userRoutes.POST("/register", UserController.Register)
+		userRoutes.POST("/login", UserController.Login)
 	}
 	log.Println("Server is listening at port", PORT)
 	r.Run(PORT)

@@ -38,3 +38,24 @@ func (u *UserController) Register(c *gin.Context) {
 		c.JSON(http.StatusCreated, res)
 	}
 }
+
+func (u *UserController) Login(c *gin.Context) {
+	var req params.CreateUser
+
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, params.Response{
+			Status:         http.StatusBadRequest,
+			Message:        "Bad Request",
+			AdditionalInfo: err,
+		})
+		return
+	}
+
+	res, errLogin := u.userService.Login(&req)
+	if errLogin != nil {
+		c.JSON(errLogin.Status, errLogin)
+	} else {
+		c.JSON(http.StatusOK, res)
+	}
+}
