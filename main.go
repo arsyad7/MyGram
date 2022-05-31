@@ -22,6 +22,8 @@ func main() {
 	{
 		userRoutes.POST("/register", UserController.Register)
 		userRoutes.POST("/login", UserController.Login)
+		userRoutes.PUT("/", UserController.UpdateUser)
+		userRoutes.DELETE("/", UserController.DeleteUser)
 	}
 	log.Println("Server is listening at port", PORT)
 	r.Run(PORT)

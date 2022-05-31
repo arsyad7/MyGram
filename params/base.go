@@ -19,4 +19,5 @@ type UserResponse struct {
 	Age       int        `json:"age,omitempty"`
 	Token     string     `json:"token,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	Message   string     `json:"message,omitempty"`
 }

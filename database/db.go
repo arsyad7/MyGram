@@ -17,6 +17,8 @@ const (
 	DB_NAME = "mygram"
 )
 
+var database *gorm.DB
+
 func StartDB() *gorm.DB {
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME)
 
@@ -30,6 +32,8 @@ func StartDB() *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
+
+	database = db
 	return db
 }
 
@@ -47,4 +51,8 @@ func migration(db *gorm.DB) error {
 		return err
 	}
 	return nil
+}
+
+func GetDB() *gorm.DB {
+	return database
 }

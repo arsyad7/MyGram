@@ -71,3 +71,52 @@ func (u *UserService) Login(req *params.CreateUser) (*params.UserResponse, *para
 		Token: accessToken,
 	}, nil
 }
+
+func (u *UserService) UpdateUser(req *params.CreateUser, id uint) (*params.UserResponse, *params.Response) {
+	model := models.User{
+		Username: req.Username,
+		Email:    req.Email,
+	}
+
+	updated, err := u.userService.UpdateUser(&model, id)
+	if err != nil {
+		errResp := params.Response{
+			Status:         400,
+			Message:        "Bad Request",
+			AdditionalInfo: err.Error(),
+		}
+		return nil, &errResp
+	}
+
+	return &params.UserResponse{
+		ID:        int(updated.ID),
+		Email:     updated.Email,
+		Username:  updated.Username,
+		Age:       updated.Age,
+		UpdatedAt: &updated.UpdatedAt,
+	}, nil
+}
+
+func (u *UserService) DeleteUser(id uint) (*params.UserResponse, *params.Response) {
+	err := u.userService.CheckUser(id)
+	if err != nil {
+		errResp := params.Response{
+			Status:  404,
+			Message: "User Not Found",
+		}
+		return nil, &errResp
+	}
+
+	err = u.userService.DeleteUser(id)
+	if err != nil {
+		errResp := params.Response{
+			Status:  400,
+			Message: "Bad Request",
+		}
+		return nil, &errResp
+	}
+
+	return &params.UserResponse{
+		Message: "Your account has been successfully deleted",
+	}, nil
+}
