@@ -8,4 +8,5 @@ type Comment struct {
 	PhotoID uint   `json:"photo_id"`
 	Message string `json:"message" gorm:"not null" form:"message" valid:"required~Message is required"`
 	User    User
+	Photo   Photo
 }

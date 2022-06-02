@@ -37,3 +37,20 @@ type UserPhoto struct {
 	Email    string `json:"email,omitempty"`
 	Username string `json:"username,omitempty"`
 }
+
+type CommentResponse struct {
+	ID        int            `json:"id,omitempty"`
+	Message   string         `json:"message,omitempty"`
+	UserID    int            `json:"user_id,omitempty"`
+	PhotoID   int            `json:"photo_id,omitempty"`
+	CreatedAt *time.Time     `json:"created_at,omitempty"`
+	UpdatedAt *time.Time     `json:"updated_at,omitempty"`
+	User      *UserComment   `json:"User,omitempty"`
+	Photo     *PhotoResponse `json:"Photo,omitempty"`
+}
+
+type UserComment struct {
+	ID       int    `json:"id,omitempty"`
+	Email    string `json:"email,omitempty"`
+	Username string `json:"username,omitempty"`
+}

@@ -2,12 +2,10 @@ package middlewares
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"mygram/database"
 	"mygram/helpers"
 	"mygram/models"
-	"mygram/services"
 	"net/http"
 	"strconv"
 	"strings"
@@ -19,11 +17,10 @@ func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authorization := c.GetHeader("Authorization")
 
-		errResp := errors.New("invalid token")
 		if authorization == "" {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error":   "Unauthorized",
-				"message": errResp,
+				"message": "Invalid Token",
 			})
 			return
 		}
@@ -62,24 +59,6 @@ func Authentication() gin.HandlerFunc {
 	}
 }
 
-func AuthorizationPhoto(c *gin.Context, u services.PhotoService) bool {
-	userID := c.Request.Header.Get("user_id")
-	photoId := c.Param("photoId")
-
-	id, _ := strconv.Atoi(photoId)
-	currUserIdInt, _ := strconv.Atoi(userID)
-	photo, err := u.GetPhotoById(id)
-	if err != nil {
-		return false
-	}
-
-	if photo.UserID != uint(currUserIdInt) {
-		return false
-	}
-
-	return true
-}
-
 func PhotoAuthorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := database.GetDB()
@@ -99,6 +78,37 @@ func PhotoAuthorization() gin.HandlerFunc {
 		userID := c.Request.Header.Get("user_id")
 		currUserIdInt, _ := strconv.Atoi(userID)
 		if photo.UserID != uint(currUserIdInt) {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error":   "Unauthorized",
+				"message": "You dont have any access",
+			})
+			return
+		}
+		c.Next()
+	}
+}
+
+func CommentAuthorization() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		db := database.GetDB()
+
+		commentId, _ := strconv.Atoi(c.Param("commentId"))
+		comment := models.Comment{}
+
+		err := db.Select("user_id").First(&comment, commentId).Error
+		if err != nil {
+			msg := fmt.Sprintf("Comment with id %v doesnt exist", commentId)
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+				"error":   "Not Found",
+				"message": msg,
+			})
+			return
+		}
+
+		userID := c.Request.Header.Get("user_id")
+		currUserIdInt, _ := strconv.Atoi(userID)
+
+		if comment.UserID != uint(currUserIdInt) {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error":   "Unauthorized",
 				"message": "You dont have any access",
