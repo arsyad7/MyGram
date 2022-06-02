@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"fmt"
 	"mygram/models"
 
 	"gorm.io/gorm"
@@ -44,7 +43,6 @@ func (s *socialMediaRepo) UpdateSocialMedia(p *models.SocialMedia, id int) (*mod
 }
 
 func (s *socialMediaRepo) DeleteSocialMedia(id int) error {
-	fmt.Println("disini")
 	var socmed models.SocialMedia
 	err := s.db.Where("id = ?", id).First(&socmed).Error
 	if err == nil {
