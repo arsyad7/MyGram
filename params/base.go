@@ -5,7 +5,7 @@ import (
 )
 
 type Response struct {
-	Status         int         `json:"status"`
+	Status         int         `json:"status,omitempty"`
 	Message        string      `json:"message,omitempty"`
 	Error          string      `json:"error,omitempty"`
 	AdditionalInfo interface{} `json:"additional_info,omitempty"`
@@ -20,4 +20,20 @@ type UserResponse struct {
 	Token     string     `json:"token,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 	Message   string     `json:"message,omitempty"`
+}
+
+type PhotoResponse struct {
+	ID        int        `json:"id,omitempty"`
+	Title     string     `json:"title,omitempty"`
+	Caption   string     `json:"caption,omitempty"`
+	PhotoUrl  string     `json:"photo_url,omitempty"`
+	UserID    int        `json:"user_id,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	User      *UserPhoto `json:"User,omitempty"`
+}
+
+type UserPhoto struct {
+	Email    string `json:"email,omitempty"`
+	Username string `json:"username,omitempty"`
 }

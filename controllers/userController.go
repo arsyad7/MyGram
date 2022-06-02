@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"mygram/middlewares"
 	"mygram/params"
 	"mygram/services"
 	"net/http"
@@ -63,14 +62,14 @@ func (u *UserController) Login(c *gin.Context) {
 }
 
 func (u *UserController) UpdateUser(c *gin.Context) {
-	auth := middlewares.Authentication(c)
-	if auth != nil {
-		c.AbortWithStatusJSON(401, params.Response{
-			Status:  401,
-			Message: auth.Error(),
-		})
-		return
-	}
+	// auth := middlewares.Authentication(c)
+	// if auth != nil {
+	// 	c.AbortWithStatusJSON(401, params.Response{
+	// 		Status:  401,
+	// 		Message: auth.Error(),
+	// 	})
+	// 	return
+	// }
 
 	var req params.CreateUser
 	err := c.ShouldBindJSON(&req)
@@ -93,14 +92,14 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 }
 
 func (u *UserController) DeleteUser(c *gin.Context) {
-	auth := middlewares.Authentication(c)
-	if auth != nil {
-		c.AbortWithStatusJSON(401, params.Response{
-			Status:  401,
-			Message: auth.Error(),
-		})
-		return
-	}
+	// auth := middlewares.Authentication(c)
+	// if auth != nil {
+	// 	c.AbortWithStatusJSON(401, params.Response{
+	// 		Status:  401,
+	// 		Message: auth.Error(),
+	// 	})
+	// 	return
+	// }
 
 	id, _ := strconv.Atoi(c.Request.Header.Get("user_id"))
 	res, errDelete := u.userService.DeleteUser(uint(id))

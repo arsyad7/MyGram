@@ -5,5 +5,6 @@ type Photo struct {
 	Caption  string `json:"caption"`
 	PhotoUrl string `json:"photo_url" gorm:"not null" form:"photo_url" valid:"required~Photo URL is required"`
 	UserID   uint   `json:"user_id"`
+	User     User
 	BasePhoto
 }
