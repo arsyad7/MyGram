@@ -22,6 +22,7 @@ func main() {
 	UserController := UserInjection(DB)
 	PhotoController := PhotoInjection(DB)
 	CommentController := CommentInjection(DB)
+	SocialMediaController := SocialMediaInjection(DB)
 
 	userRoutes := r.Group("/users")
 	{
@@ -46,6 +47,15 @@ func main() {
 		commentRoutes.PUT("/:commentId", middlewares.CommentAuthorization(), CommentController.UpdateComment)
 		commentRoutes.DELETE("/:commentId", middlewares.CommentAuthorization(), CommentController.DeleteComment)
 	}
+	socmedRoutes := r.Group("/socialmedias")
+	{
+		socmedRoutes.Use(middlewares.Authentication())
+		socmedRoutes.POST("/", SocialMediaController.CreateSocialMedia)
+		socmedRoutes.GET("/", SocialMediaController.GetSocialMedias)
+		socmedRoutes.PUT("/:socialMediaId", middlewares.SocialMediaAuthorization(), SocialMediaController.UpdateSocialMedia)
+		socmedRoutes.DELETE("/:socialMediaId", middlewares.SocialMediaAuthorization(), SocialMediaController.DeleteSocialMedia)
+	}
+
 	log.Println("Server is listening at port", PORT)
 	r.Run(PORT)
 }
@@ -66,4 +76,10 @@ func CommentInjection(db *gorm.DB) *controllers.CommentController {
 	commentRepo := repositories.NewCommentRepo(db)
 	commentService := services.NewCommentService(&commentRepo)
 	return controllers.NewCommentController(commentService)
+}
+
+func SocialMediaInjection(db *gorm.DB) *controllers.SocialMediaController {
+	socialMediaRepo := repositories.NewSocialMediaRepo(db)
+	socialMediaService := services.NewSocialMediaService(&socialMediaRepo)
+	return controllers.NewSocialMediaController(socialMediaService)
 }

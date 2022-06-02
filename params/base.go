@@ -54,3 +54,17 @@ type UserComment struct {
 	Email    string `json:"email,omitempty"`
 	Username string `json:"username,omitempty"`
 }
+
+type SocialMediaResponse struct {
+	ID             int           `json:"id,omitempty"`
+	Name           string        `json:"name,omitempty"`
+	SocialMediaUrl string        `json:"social_media_url,omitempty"`
+	UserID         int           `json:"user_id"`
+	UpdatedAt      *time.Time    `json:"updated_at,omitempty"`
+	CreatedAt      *time.Time    `json:"created_at,omitempty"`
+	User           *UserResponse `json:"User,omitempty"`
+}
+
+type Socmed struct {
+	SocialMedias []SocialMediaResponse `json:"social_medias"`
+}
