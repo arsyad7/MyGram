@@ -28,7 +28,7 @@ func main() {
 	{
 		userRoutes.POST("/register", UserController.Register)
 		userRoutes.POST("/login", UserController.Login)
-		userRoutes.PUT("/", middlewares.Authentication(), UserController.UpdateUser)
+		userRoutes.PUT("/:userId", middlewares.Authentication(), middlewares.UserAuthorization(), UserController.UpdateUser)
 		userRoutes.DELETE("/", middlewares.Authentication(), UserController.DeleteUser)
 	}
 	photoRoutes := r.Group("/photos")

@@ -59,6 +59,23 @@ func Authentication() gin.HandlerFunc {
 	}
 }
 
+func UserAuthorization() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userIdParam, _ := strconv.Atoi(c.Param("userId"))
+		userIdStr := c.Request.Header.Get("user_id")
+		userId, _ := strconv.Atoi(userIdStr)
+
+		if userId != userIdParam {
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+				"error":   "Forbidden",
+				"message": "You dont have any access",
+			})
+			return
+		}
+		c.Next()
+	}
+}
+
 func PhotoAuthorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := database.GetDB()
